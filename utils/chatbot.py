@@ -4,7 +4,7 @@ import google.generativeai as genai
 from config.config import GEMINI_API_KEY
 
 try:
-    genai.configure(api_key="AIzaSyDllhh8PF8P27IFP6B4EGCjJ87wlhu8rUg")
+   #gpt api   genai.configure(api_key="YOUR_API_KEY")
     # List available models to verify
     available_models = [m.name for m in genai.list_models()]
     print(f"Available models: {available_models}")
