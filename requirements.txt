@@ -1,4 +1,5 @@
 streamlit==1.31.0
+streamlit-lottie
 pymongo==4.6.1
 google-generativeai==0.3.2
 bcrypt==4.1.2
