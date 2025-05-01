@@ -699,4 +699,6 @@ elif menu == "Results":
                     st_lottie(lottie_empty, height=200, key="empty_results")
                     
     except Exception as e:
-        st.error(f"❌ Error fetching results: {str(e)}")
+        st.error(f"❌ Error fetching results: {str(e)}") 
+        
+        #
