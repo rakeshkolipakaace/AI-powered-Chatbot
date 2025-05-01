@@ -440,7 +440,7 @@
 
 
 
-
+# required code
 import streamlit as st
 from streamlit_lottie import st_lottie
 import requests
@@ -501,8 +501,8 @@ if menu == "Login":
     with col1:
         st.markdown("""
         <div style="padding: 20px 0;">
-            <h3>Welcome to GenEDxAI!</h3>
-            <p style="font-size: 16px; line-height: 1.5;">
+            <h3>😊 Welcome to GenEDxAI!</h3>
+            <p style="font-size: 18px; line-height: 1.5;">
                 👋 A platform that uses AI to create educational content and evaluate your learning. 
                 Whether you're a student or educator, we provide personalized support and quizzes 
                 to help you succeed!
