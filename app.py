@@ -569,6 +569,8 @@ elif menu == "Register":
             st.success("✅ Registered successfully! Please log in.")
         except Exception as e:
             st.error(f"❌ Registration failed: {str(e)}")
+            
+    
 
 elif menu == "Learn":
     st.title(f"👋 Welcome, {st.session_state['username']}!")
@@ -702,3 +704,23 @@ elif menu == "Results":
         st.error(f"❌ Error fetching results: {str(e)}") 
         
         
+        
+st.markdown("""
+<hr style="border: none; border-top: 2px solid #ccc; margin: 40px 0;" />
+
+<div style="text-align: center; padding: 10px 0;">
+    <p style="font-size: 16px; color: gray;">
+        © 2025 <strong>GenEDxAI</strong>. All rights reserved.
+    </p>
+    <p style="font-size: 14px; color: gray;">
+        Crafted with <span style="color: #e74c3c;">❤️</span> using <strong>Streamlit</strong>. Designed for Lifelong Learners.
+    </p>
+    <div style="margin-top: 10px;">
+        <a href="https://www.linkedin.com" target="_blank" style="margin: 0 10px; text-decoration: none; color: #0e76a8;">LinkedIn</a>
+        <a href="https://github.com" target="_blank" style="margin: 0 10px; text-decoration: none; color: #333;">GitHub</a>
+        <a href="https://www.facebook.com/" style="margin: 0 10px; text-decoration: none; color: #d44638;">Facebook</a>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+        
+    
