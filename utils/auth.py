@@ -4,7 +4,7 @@ from config.config import MONGODB_URI, DB_NAME
 
 try:
     client = MongoClient(MONGODB_URI)
-    db = client[DB_NAME]
+    db = client[DB_NAME]  
 except Exception as e:
     raise Exception(f"Failed to connect to MongoDB: {str(e)}")
 
