@@ -555,10 +555,15 @@ elif menu == "Register":
         """, unsafe_allow_html=True)
         
     with col2:
+        lottie_login = load_lottieurl("https://assets5.lottiefiles.com/packages/lf20_1pxqjqps.json")
+        if lottie_login:
+            st_lottie(lottie_login, height=450, key="welcome_animation")
+        else:
+            st.warning("⚠️ Could not load animation")
         # Different animation for register page with larger size
-        lottie_register = load_lottieurl("https://assets9.lottiefiles.com/packages/lf20_kU51j8.json")
-        if lottie_register:
-            st_lottie(lottie_register, height=450, key="register_animation")
+        # lottie_register = load_lottieurl("https://assets9.lottiefiles.com/packages/lf20_kU51j8.json")
+        # if lottie_register:
+        #     st_lottie(lottie_register, height=450, key="register_animation")
         
     username = st.sidebar.text_input("👤 New Username")
     password = st.sidebar.text_input("🔒 New Password", type="password")
@@ -576,10 +581,10 @@ elif menu == "Learn":
     st.title(f"👋 Welcome, {st.session_state['username']}!")
 
     # Make banner responsive
-    try:
-        st.image("static/images/banner.jpg", use_column_width=True)
-    except Exception:
-        st.warning("⚠️ Banner image not found. Continuing without it.")
+    # try:
+    #     st.image("static/images/banner.jpg", use_column_width=True)
+    # except Exception:
+    #     st.warning("⚠️ Banner image not found. Continuing without it.")
 
     # Make chat interface responsive
     col1, col2 = st.columns([4, 1])  # Main content and padding/space
@@ -607,6 +612,8 @@ elif menu == "Learn":
                 <p><strong>🤖 AI:</strong> {ai}</p>
             </div>
             """.format(user=chat['user'], ai=chat['ai']), unsafe_allow_html=True)
+            
+
 
 elif menu == "Exam":
     st.title("📝 Take an Exam")
@@ -665,7 +672,7 @@ elif menu == "Results":
             # Creating a more responsive results display
             for i, result in enumerate(results):
                 st.markdown(f"""
-                <div style="background-color: {'#f3f9ff' if i % 2 == 0 else '#ffffff'}; 
+                <div style="background-color: {'' if i % 2 == 0 else ''}; 
                             padding: 15px; border-radius: 5px; margin-bottom: 10px; 
                             border-left: 4px solid {'#1976d2' if result['marks'] >= 3 else '#e57373'};">
                     <h4>📌 {result['topic']}</h4>
