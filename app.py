@@ -449,6 +449,9 @@ from utils.auth import login_user, register_user
 from utils.chatbot import get_learning_response
 from utils.exam import generate_exam, evaluate_exam
 from utils.db import store_result, get_user_results
+# from fpdf import FPDF
+# import io
+
 
 # Load custom CSS
 with open("static/style.css") as f:
@@ -612,6 +615,10 @@ elif menu == "Learn":
                 <p><strong>🤖 AI:</strong> {ai}</p>
             </div>
             """.format(user=chat['user'], ai=chat['ai']), unsafe_allow_html=True)
+            pdf_file = generate_pdf(st.session_state["chat_history"])
+            st.sidebar.download_button("📄 Download PDF", pdf_file, "chat_history.pdf", "application/pdf")
+
+
             
 
 
@@ -637,7 +644,7 @@ elif menu == "Exam":
         
         # Make questions stand out with styled container
         st.markdown(f"""
-        <div style="background-color: #f0f2f6; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+        <div style="background-color: ""; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
             {st.session_state["exam_questions"]}
         </div>
         """, unsafe_allow_html=True)
@@ -651,7 +658,7 @@ elif menu == "Exam":
                 
                 # Results with better styling
                 st.markdown(f"""
-                <div style="background-color: #e8f5e9; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <div style="background-color: ""; padding: 20px; border-radius: 10px; margin: 20px 0;">
                     <h3>Exam Results</h3>
                     <h4>🎓 Your Score: {marks}/5</h4>
                     <h5>🧠 Feedback:</h5>
