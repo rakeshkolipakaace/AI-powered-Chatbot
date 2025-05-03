@@ -1,12 +1,30 @@
-/*.main {
-    background-color: #f0f2f6;  /* Light gray instead of white *
+/* Make all text readable in dark mode */
+h1, h2, h3, p, div, span {
+    color: white !important;
 }
-h1 {
-    color: #1f77b4;
-    font-family: 'Arial', sans-serif;
+
+/* Centered heading and content */
+.centered {
+    text-align: center;
 }
-body {
-    font-family: 'Arial', sans-serif;
-} */
 
+/* Responsive padding on small devices */
+@media (max-width: 200px) {
+    .block-container {
+        padding: 10px !important;
+    }
 
+    .stLottie {
+        max-width: 90% !important;
+        height: auto !important;
+        margin: auto;
+    }
+
+    h1, h2, h3 {
+        font-size: 1.5rem !important;
+    }
+
+    p, div {
+        font-size: 1rem !important;
+    }
+}
