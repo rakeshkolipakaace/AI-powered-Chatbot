@@ -774,12 +774,15 @@ if "logged_in" not in st.session_state:
     st.session_state["menu"] = "Login"
 
 # Sidebar Navigation
-st.sidebar.title("📘 EduBot")
+# st.sidebar.title("📘 EduBot")
+st.sidebar.markdown('<h1 style="font-size:36px;">📘 EduBot</h1>', unsafe_allow_html=True)
+
+st.sidebar.markdown('<div style="font-size:28px;">🔐 Menu</div>', unsafe_allow_html=True)
 
 if not st.session_state["logged_in"]:
-    menu = st.sidebar.radio("🔐 Menu", ["Login", "Register"])
+    menu = st.sidebar.radio("", ["Login", "Register"],key="menu_radio")
 else:
-    menu = st.sidebar.radio("📚 Menu", ["Learn", "Exam", "Results"])
+    menu = st.sidebar.radio("📚 Menu", ["Learn", "Exam", "Results"],key="menu_radio")
     if st.sidebar.button("🚪 Logout"):
         st.session_state["logged_in"] = False
         st.session_state["username"] = None
