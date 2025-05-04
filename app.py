@@ -736,12 +736,13 @@
 #     </div>
 # </div>
 # """, unsafe_allow_html=True)
-        
-    
-    
-    
-    
-    
+ 
+ 
+ 
+ 
+ 
+ 
+
 import streamlit as st
 from streamlit_lottie import st_lottie
 import requests
@@ -788,15 +789,13 @@ if "logged_in" not in st.session_state:
     st.session_state["menu"] = "Login"
 
 # Sidebar Navigation
-# st.sidebar.title("📘 EduBot")
 st.sidebar.markdown('<h1 style="font-size:36px;">📘 EduBot</h1>', unsafe_allow_html=True)
-
 st.sidebar.markdown('<div style="font-size:28px;">🔐 Menu</div>', unsafe_allow_html=True)
 
 if not st.session_state["logged_in"]:
-    menu = st.sidebar.radio("", ["Login", "Register"],key="menu_radio")
+    menu = st.sidebar.radio("", ["Login", "Register"], key="menu_radio")
 else:
-    menu = st.sidebar.radio("📚 Menu", ["Learn", "Exam", "Results"],key="menu_radio")
+    menu = st.sidebar.radio("📚 Menu", ["Learn", "Exam", "Results"], key="menu_radio")
     if st.sidebar.button("🚪 Logout"):
         st.session_state["logged_in"] = False
         st.session_state["username"] = None
@@ -837,21 +836,25 @@ if menu == "Login":
 
     # Sidebar login fields
     st.sidebar.markdown('<div style="margin-top:100px;"><label style="font-size:25px;">👤 Username</label></div>', unsafe_allow_html=True)
-    login_username = st.sidebar.text_input("", key="login_user_input")
+    login_username = st.sidebar.text_input("", key="login_user_input", placeholder="Enter username")
 
     st.sidebar.markdown('<div style="margin-top:30px;"><label style="font-size:25px;">🔒 Password</label></div>', unsafe_allow_html=True)
-    login_password = st.sidebar.text_input("", type="password", key="login_pass_input")
+    login_password = st.sidebar.text_input("", type="password", key="login_pass_input", placeholder="Enter password")
 
     login_clicked = st.sidebar.button("🔐 **Login**")
 
     if login_clicked:
-        if login_user(login_username, login_password):
-            st.session_state["logged_in"] = True
-            st.session_state["username"] = login_username
-            st.success("✅ Logged in successfully!")
-            st.rerun()
-        else:
-            st.error("❌ Invalid credentials or error connecting to database.")
+        try:
+            if login_user(login_username, login_password):
+                st.session_state["logged_in"] = True
+                st.session_state["username"] = login_username
+                st.session_state["menu"] = "Learn"
+                st.success(f"✅ Logged in as {login_username}!")
+                st.rerun()
+            else:
+                st.error("❌ Invalid username or password.")
+        except Exception as e:
+            st.error(f"❌ Login failed: {str(e)}")
 
 # =============================
 # ------- Register Page -------
@@ -880,10 +883,10 @@ elif menu == "Register":
 
     # Sidebar register fields
     st.sidebar.markdown('<div style="margin-top:100px;"><label style="font-size:25px;">👤 New Username</label></div>', unsafe_allow_html=True)
-    register_username = st.sidebar.text_input("", key="register_user_input")
+    register_username = st.sidebar.text_input("", key="register_user_input", placeholder="Choose a unique username")
 
     st.sidebar.markdown('<div style="margin-top:50px;"><label style="font-size:25px;">🔒 New Password</label></div>', unsafe_allow_html=True)
-    register_password = st.sidebar.text_input("", type="password", key="register_pass_input")
+    register_password = st.sidebar.text_input("", type="password", key="register_pass_input", placeholder="Choose a strong password")
 
     register_clicked = st.sidebar.button("📝 **Register**")
 
@@ -891,17 +894,27 @@ elif menu == "Register":
         try:
             register_user(register_username, register_password)
             st.success("✅ Registered successfully! Please log in.")
+            st.session_state["menu"] = "Login"
+            st.rerun()
         except Exception as e:
             st.error(f"❌ Registration failed: {str(e)}")
 
-# =============================
-# -------- Learn Page ---------
-# =============================
+
 elif menu == "Learn":
     st.title(f"👋 Welcome, {st.session_state['username']}!")
-    col1, col2 = st.columns([4, 1])
+
+    # Make banner responsive
+    # try:
+    #     st.image("static/images/banner.jpg", use_column_width=True)
+    # except Exception:
+    #     st.warning("⚠️ Banner image not found. Continuing without it.")
+
+    # Make chat interface responsive
+    col1, col2 = st.columns([4, 1])  # Main content and padding/space
+    
     with col1:
         prompt = st.text_area("💬 Ask me anything to learn!", key="learn_input", height=100)
+        
         if st.button("🚀 Submit"):
             if prompt:
                 try:
@@ -913,24 +926,28 @@ elif menu == "Learn":
 
     if st.session_state["chat_history"]:
         st.subheader("📜 Chat History")
-        for chat in reversed(st.session_state["chat_history"][-5:]):
-            st.markdown(f"""
+        for chat in reversed(st.session_state["chat_history"][-5:]):  # Show last 5 chats, newest first
+            st.markdown("""
             <div style="border-left: 3px solid #2e7d32; padding-left: 10px; margin-bottom: 10px;">
-                <p><strong>🧑 You:</strong> {chat['user']}</p>
+                <p><strong>🧑 You:</strong> {user}</p>
             </div>
             <div style="border-left: 3px solid #1976d2; padding-left: 10px; margin-bottom: 20px;">
-                <p><strong>🤖 AI:</strong> {chat['ai']}</p>
+                <p><strong>🤖 AI:</strong> {ai}</p>
             </div>
-            """, unsafe_allow_html=True)
+            """.format(user=chat['user'], ai=chat['ai']), unsafe_allow_html=True)
+           
 
-# =============================
-# -------- Exam Page ----------
-# =============================
+            
+
+
 elif menu == "Exam":
     st.title("📝 Take an Exam")
+    
     col1, col2 = st.columns([3, 1])
+    
     with col1:
         topic = st.text_input("📚 Enter a topic for the exam")
+        
         if st.button("🎯 Start Exam") and topic:
             try:
                 questions = generate_exam(topic)
@@ -942,50 +959,66 @@ elif menu == "Exam":
 
     if st.session_state["exam_active"]:
         st.subheader("📄 Questions")
+        
+        # Make questions stand out with styled container
         st.markdown(f"""
-        <div style="padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+        <div style="background-color: ""; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
             {st.session_state["exam_questions"]}
         </div>
         """, unsafe_allow_html=True)
+        
         answers = st.text_area("✏️ Enter your answers (one per line)", key="exam_input", height=200)
+        
         if st.button("📤 Submit Answers"):
             try:
                 marks, mistakes = evaluate_exam(st.session_state["exam_questions"], answers)
                 store_result(st.session_state["username"], topic, marks, mistakes)
+                
+                # Results with better styling
                 st.markdown(f"""
-                <div style="padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <div style="background-color: ""; padding: 20px; border-radius: 10px; margin: 20px 0;">
                     <h3>Exam Results</h3>
                     <h4>🎓 Your Score: {marks}/5</h4>
                     <h5>🧠 Feedback:</h5>
                     <div>{mistakes}</div>
                 </div>
                 """, unsafe_allow_html=True)
+                
                 st.session_state["exam_active"] = False
             except Exception as e:
                 st.error(f"❌ Error evaluating exam: {str(e)}")
 
-# =============================
-# -------- Results Page -------
-# =============================
 elif menu == "Results":
     st.title("📊 Your Results")
+
     try:
         results = get_user_results(st.session_state["username"])
         if results:
+            # Creating a more responsive results display
             for i, result in enumerate(results):
                 st.markdown(f"""
-                <div style="padding: 15px; border-radius: 5px; margin-bottom: 10px; 
+                <div style="background-color: {'' if i % 2 == 0 else ''}; 
+                            padding: 15px; border-radius: 5px; margin-bottom: 10px; 
                             border-left: 4px solid {'#1976d2' if result['marks'] >= 3 else '#e57373'};">
                     <h4>📌 {result['topic']}</h4>
                     <div style="display: flex; flex-wrap: wrap; gap: 20px;">
-                        <div><strong>🏆 Score:</strong> {result['marks']}/5</div>
-                        <div><strong>🗓️ Date:</strong> {result['date']}</div>
+                        <div>
+                            <strong>🏆 Score:</strong> {result['marks']}/5
+                        </div>
+                        <div>
+                            <strong>🗓️ Date:</strong> {result['date']}
+                        </div>
                     </div>
-                    <div style="margin-top: 10px;"><strong>❗ Feedback:</strong><br>{result['mistakes']}</div>
+                    <div style="margin-top: 10px;">
+                        <strong>❗ Feedback:</strong><br>
+                        {result['mistakes']}
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
         else:
+            # Empty state with animation
             col1, col2 = st.columns([2, 3])
+            
             with col1:
                 st.markdown("""
                 <div style="padding: 20px 0;">
@@ -993,24 +1026,26 @@ elif menu == "Results":
                     <p>Take an exam to see your results here.</p>
                 </div>
                 """, unsafe_allow_html=True)
+                
             with col2:
                 lottie_empty = load_lottieurl("https://assets9.lottiefiles.com/packages/lf20_ydo1amjm.json")
                 if lottie_empty:
                     st_lottie(lottie_empty, height=200, key="empty_results")
+                    
     except Exception as e:
-        st.error(f"❌ Error fetching results: {str(e)}")
-
-# =============================
-# -------- Footer -------------
-# =============================
+        st.error(f"❌ Error fetching results: {str(e)}") 
+        
+        
+        
 st.markdown("""
 <hr style="border: none; border-top: 2px solid #ccc; margin: 40px 0;" />
+
 <div style="text-align: center; padding: 10px 0;">
     <p style="font-size: 16px; color: gray;">
         © 2025 <strong>GenEDxAI</strong>. All rights reserved.
     </p>
     <p style="font-size: 14px; color: gray;">
-        Crafted with <span style="color: #e74c3c;">❤️</span> using <strong>Streamlit</strong>.
+        Crafted with <span style="color: #e74c3c;">❤️</span> using <strong>Streamlit</strong>. Designed for Lifelong Learners.
     </p>
     <div style="margin-top: 10px;">
         <a href="https://www.linkedin.com" target="_blank" style="margin: 0 10px; text-decoration: none; color: #0e76a8;">LinkedIn</a>
@@ -1019,3 +1054,4 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
+ 
