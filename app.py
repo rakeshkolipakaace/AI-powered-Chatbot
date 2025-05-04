@@ -753,6 +753,20 @@ from utils.db import store_result, get_user_results
 # from fpdf import FPDF
 # import io
 
+hide_streamlit_elements = """
+<style>
+#GithubIcon { 
+    visibility: hidden; 
+}
+.stDeployButton { 
+    visibility: hidden; 
+}
+.viewerBadge_container__1QSob { 
+    visibility: hidden; 
+}
+</style>
+"""
+st.markdown(hide_streamlit_elements, unsafe_allow_html=True)
 # Load custom CSS
 with open("static/style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
